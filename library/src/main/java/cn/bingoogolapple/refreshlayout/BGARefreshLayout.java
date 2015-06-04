@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,7 +159,7 @@ public class BGARefreshLayout extends LinearLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int paddingTop = (int) animation.getAnimatedValue();
+                int paddingTop = (Integer) animation.getAnimatedValue();
                 mWholeHeaderView.setPadding(0, paddingTop, 0, 0);
             }
         });
@@ -235,7 +236,7 @@ public class BGARefreshLayout extends LinearLayout {
 
     private void setRecyclerViewOnScrollListener() {
         if (mRecyclerView != null) {
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     if ((newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_SETTLING) && shouldHandleRecyclerViewLoadingMore()) {
@@ -725,7 +726,7 @@ public class BGARefreshLayout extends LinearLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int paddingTop = (int) animation.getAnimatedValue();
+                int paddingTop = (Integer) animation.getAnimatedValue();
                 mWholeHeaderView.setPadding(0, paddingTop, 0, 0);
             }
         });
@@ -741,7 +742,7 @@ public class BGARefreshLayout extends LinearLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int paddingTop = (int) animation.getAnimatedValue();
+                int paddingTop = (Integer) animation.getAnimatedValue();
                 mWholeHeaderView.setPadding(0, paddingTop, 0, 0);
             }
         });
@@ -758,9 +759,16 @@ public class BGARefreshLayout extends LinearLayout {
     /**
      * 开始上拉加载更多
      */
+    private long lastLoadTime;
     private void beginLoadingMore() {
+    	long current = System.currentTimeMillis();
+    	if (current - lastLoadTime <2*1000) {
+			return;
+		}
+    	lastLoadTime = current;
         if (!mIsLoadingMore && mLoadMoreFooterView != null && mDelegate != null) {
             mIsLoadingMore = true;
+            Log.e("load_more_more_more", " more +" +mIsLoadingMore+Thread.currentThread());
 
             startShowLoadingMoreViewAnim();
 
@@ -775,7 +783,7 @@ public class BGARefreshLayout extends LinearLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int paddingBottom = (int) animation.getAnimatedValue();
+                int paddingBottom = (Integer) animation.getAnimatedValue();
                 mLoadMoreFooterView.setPadding(0, 0, 0, paddingBottom);
             }
         });
@@ -788,7 +796,7 @@ public class BGARefreshLayout extends LinearLayout {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                int paddingBottom = (int) animation.getAnimatedValue();
+                int paddingBottom = (Integer) animation.getAnimatedValue();
                 mLoadMoreFooterView.setPadding(0, 0, 0, paddingBottom);
 
                 if (mScrollView != null) {

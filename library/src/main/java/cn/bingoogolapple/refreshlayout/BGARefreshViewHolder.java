@@ -64,7 +64,11 @@ public abstract class BGARefreshViewHolder {
      * 是否开启加载更多功能
      */
     private boolean mIsLoadingMoreEnabled = true;
-    /**
+    public void setmIsLoadingMoreEnabled(boolean mIsLoadingMoreEnabled) {
+		this.mIsLoadingMoreEnabled = mIsLoadingMoreEnabled;
+	}
+
+	/**
      * 整个加载更多控件的背景颜色资源id
      */
     private int mLoadMoreBackgroundColorRes = -1;
